@@ -1,23 +1,24 @@
 # local-clipboard
 
-A tiny Go app that helps you share clipboard text between your Linux laptop and phone over your local network.
+A Go app to share clipboard text between your Linux laptop and your phone over local network.
 
-## What it does
+## Features
 
-- Starts a local HTTP server with a mobile-friendly web page.
-- Accepts clipboard text from your phone browser.
-- Runs a Linux clipboard watcher client that detects local copy changes and pushes them to the server automatically.
-- Optionally writes remote clipboard changes back to Linux clipboard when write command is available.
+- Local HTTP server with responsive mobile-friendly web UI.
+- Linux clipboard watcher that automatically uploads new copy events.
+- Mobile web form to manually push text from phone.
+- SQLite-backed clipboard history (`/api/history`) for persistence and browsing.
+- Optional remote-to-local clipboard apply when clipboard write command is available.
 
 ## Run
 
 ### 1) Start server on laptop
 
 ```bash
-go run . server -addr :8080
+go run . server -addr :8080 -db clipboard.db
 ```
 
-### 2) Start Linux clipboard watcher
+### 2) Start Linux clipboard watcher client
 
 ```bash
 go run . client -server http://127.0.0.1:8080 -interval 1s
@@ -25,19 +26,21 @@ go run . client -server http://127.0.0.1:8080 -interval 1s
 
 ### 3) Open from phone
 
-Find your laptop LAN IP (for example `192.168.1.20`) and open:
+Use your laptop LAN IP (example `192.168.1.20`):
 
 ```text
 http://192.168.1.20:8080
 ```
 
-Then paste text in the page and tap **Send to server**.
+## API
+
+- `POST /api/clipboard` with `{ "text": "...", "source": "mobile-web" }`
+- `GET /api/clipboard` for latest value
+- `GET /api/history?limit=25` for recent history
 
 ## Linux dependencies
 
 Install one clipboard tool:
 
-- Wayland: `wl-clipboard` (`wl-paste` / `wl-copy`)
+- Wayland: `wl-clipboard` (`wl-paste` and `wl-copy`)
 - X11: `xclip` or `xsel`
-
-If write support is unavailable, the client still uploads local copy events to the server.
