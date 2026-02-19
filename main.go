@@ -544,8 +544,11 @@ const indexHTML = `<!doctype html>
 
 <script>
 let currentQuery = '';
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
 let currentItems = [];
 let sending = false;
+=======
+>>>>>>> master
 
 function escHtml(value) {
   return (value || '').replace(/[<>&]/g, function(m){ return ({'<':'&lt;','>':'&gt;','&':'&amp;'})[m]; });
@@ -560,7 +563,11 @@ function shortText(text) {
 async function loadLatest() {
   const latestEl = document.getElementById('latest');
   try {
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
     const res = await fetch('/api/clipboard', { cache: 'no-store' });
+=======
+    const res = await fetch('/api/clipboard');
+>>>>>>> master
     if (!res.ok) { latestEl.textContent = 'Clipboard is empty.'; return; }
     const data = await res.json();
     latestEl.textContent = data.text;
@@ -570,11 +577,16 @@ async function loadLatest() {
 }
 
 async function updatePin(id, pinned) {
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
   const res = await fetch('/api/history/pin', {
+=======
+  await fetch('/api/history/pin', {
+>>>>>>> master
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: id, pinned: pinned })
   });
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
   if (!res.ok) {
     throw new Error('Pin update failed');
   }
@@ -598,16 +610,23 @@ function fallbackCopyText(txt) {
   }
   document.body.removeChild(ta);
   return ok;
+=======
+>>>>>>> master
 }
 
 async function copyText(txt, btn) {
   try {
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
     if (navigator.clipboard && window.isSecureContext) {
+=======
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+>>>>>>> master
       await navigator.clipboard.writeText(txt);
       btn.textContent = '✅';
       setTimeout(function(){ btn.textContent = '📋'; }, 900);
       return;
     }
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
     if (fallbackCopyText(txt)) {
       btn.textContent = '✅';
       setTimeout(function(){ btn.textContent = '📋'; }, 900);
@@ -620,6 +639,10 @@ async function copyText(txt, btn) {
       setTimeout(function(){ btn.textContent = '📋'; }, 900);
       return;
     }
+=======
+    btn.textContent = '❌';
+  } catch (e) {
+>>>>>>> master
     btn.textContent = '❌';
   }
 }
@@ -628,18 +651,31 @@ async function loadHistory() {
   const host = document.getElementById('history');
   const query = currentQuery ? '&q=' + encodeURIComponent(currentQuery) : '';
   try {
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
     const res = await fetch('/api/history?limit=80' + query, { cache: 'no-store' });
     if (!res.ok) { host.innerHTML = '<div class="empty">No history yet.</div>'; return; }
     currentItems = await res.json();
     if (!currentItems.length) { host.innerHTML = '<div class="empty">No matching history.</div>'; return; }
 
     host.innerHTML = currentItems.map(function(item){
+=======
+    const res = await fetch('/api/history?limit=80' + query);
+    if (!res.ok) { host.innerHTML = '<div class="empty">No history yet.</div>'; return; }
+    const items = await res.json();
+    if (!items.length) { host.innerHTML = '<div class="empty">No matching history.</div>'; return; }
+
+    host.innerHTML = items.map(function(item){
+>>>>>>> master
       const pinClass = item.pinned ? 'pin-on' : '';
       const pinLabel = item.pinned ? '📌' : '📍';
       return '<article class="history-item">'
         + '<div class="history-top">'
           + '<div class="actions">'
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
             + '<button class="icon-btn copy-btn" data-id="' + item.id + '" title="Copy">📋</button>'
+=======
+            + '<button class="icon-btn copy-btn" data-copy="' + escHtml(item.text) + '" title="Copy">📋</button>'
+>>>>>>> master
             + '<button class="icon-btn pin-btn ' + pinClass + '" data-id="' + item.id + '" data-pinned="' + item.pinned + '" title="Pin">' + pinLabel + '</button>'
           + '</div>'
         + '</div>'
@@ -649,23 +685,32 @@ async function loadHistory() {
     }).join('');
 
     host.querySelectorAll('.copy-btn').forEach(function(btn){
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
       btn.addEventListener('click', function(){
         const id = Number(btn.getAttribute('data-id'));
         const item = currentItems.find(function(x){ return x.id === id; });
         if (item) copyText(item.text || '', btn);
       });
+=======
+      btn.addEventListener('click', function(){ copyText(btn.getAttribute('data-copy'), btn); });
+>>>>>>> master
     });
 
     host.querySelectorAll('.pin-btn').forEach(function(btn){
       btn.addEventListener('click', async function(){
         const id = Number(btn.getAttribute('data-id'));
         const pinned = btn.getAttribute('data-pinned') === 'true';
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
         try {
           await updatePin(id, !pinned);
           await loadHistory();
         } catch (e) {
           document.getElementById('sendStatus').textContent = 'Pin update failed.';
         }
+=======
+        await updatePin(id, !pinned);
+        await loadHistory();
+>>>>>>> master
       });
     });
   } catch (err) {
@@ -674,12 +719,16 @@ async function loadHistory() {
 }
 
 document.getElementById('sendBtn').addEventListener('click', async function(){
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
   if (sending) return;
+=======
+>>>>>>> master
   const text = document.getElementById('clipInput').value.trim();
   if (!text) {
     document.getElementById('sendStatus').textContent = 'Please enter text first.';
     return;
   }
+<<<<<<< codex/create-go-app-for-clipboard-sharing-server-5mx1gw
 
   sending = true;
   const statusEl = document.getElementById('sendStatus');
@@ -707,6 +756,17 @@ document.getElementById('sendBtn').addEventListener('click', async function(){
   } finally {
     sending = false;
   }
+=======
+  const res = await fetch('/api/clipboard', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: text, source: 'mobile-web' })
+  });
+  document.getElementById('sendStatus').textContent = res.ok ? 'Saved.' : 'Send failed.';
+  if (res.ok) document.getElementById('clipInput').value = '';
+  await loadLatest();
+  await loadHistory();
+>>>>>>> master
 });
 
 document.getElementById('clearBtn').addEventListener('click', function(){
