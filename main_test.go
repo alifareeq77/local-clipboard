@@ -10,10 +10,10 @@ import (
 
 func TestClipboardStoreSetAndGet(t *testing.T) {
 	store := &clipboardStore{}
-	entry := clipboardUpdate{Text: "hello", Source: "test"}
+	entry := clipboardUpdate{Text: "hello", Source: "test", Pinned: true}
 	store.set(entry)
 	latest := store.get()
-	if latest.Text != "hello" || latest.Source != "test" {
+	if latest.Text != "hello" || latest.Source != "test" || !latest.Pinned {
 		t.Fatalf("unexpected latest: %+v", latest)
 	}
 }
@@ -34,27 +34,31 @@ func TestAPIClipboardValidation(t *testing.T) {
 	}
 }
 
-func TestHistoryEndpoint(t *testing.T) {
+func TestHistorySearchAndPin(t *testing.T) {
 	h := &sqliteHistory{path: t.TempDir() + "/test.db"}
 	if err := h.init(); err != nil {
 		t.Fatal(err)
 	}
 	a := &app{store: &clipboardStore{}, history: h}
 
-	_, _ = h.insert("one", "src1")
-	_, _ = h.insert("two", "src2")
+	first, _ := h.insert("alpha snippet", "src1")
+	_, _ = h.insert("beta note", "src2")
+	if err := h.setPinned(first.ID, true); err != nil {
+		t.Fatal(err)
+	}
 
-	req := httptest.NewRequest(http.MethodGet, "/api/history?limit=10", nil)
+	req := httptest.NewRequest(http.MethodGet, "/api/history?limit=10&q=alpha", nil)
 	rr := httptest.NewRecorder()
 	a.handleHistory(rr, req)
 	if rr.Code != http.StatusOK {
 		t.Fatalf("expected 200 got %d", rr.Code)
 	}
+
 	var got []clipboardUpdate
 	if err := json.Unmarshal(rr.Body.Bytes(), &got); err != nil {
 		t.Fatal(err)
 	}
-	if len(got) != 2 || got[0].Text != "two" {
-		t.Fatalf("unexpected history: %+v", got)
+	if len(got) != 1 || got[0].Text != "alpha snippet" || !got[0].Pinned {
+		t.Fatalf("unexpected search results: %+v", got)
 	}
 }

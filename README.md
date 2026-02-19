@@ -1,24 +1,25 @@
 # local-clipboard
 
-A Go app to share clipboard text between your Linux laptop and your phone over local network.
+A compact Go app to sync clipboard text between Linux and phone on your local network.
 
 ## Features
 
-- Local HTTP server with responsive mobile-friendly web UI.
-- Linux clipboard watcher that automatically uploads new copy events.
-- Mobile web form to manually push text from phone.
-- SQLite-backed clipboard history (`/api/history`) for persistence and browsing.
-- Optional remote-to-local clipboard apply when clipboard write command is available.
+- Responsive green-themed UI tuned for small phones (including iPhone-sized screens).
+- Mobile send form + live latest clipboard view.
+- Searchable history with pin-to-top behavior.
+- One-tap copy button on each history card.
+- SQLite-backed persistent history (`clipboard.db`).
+- Linux clipboard watcher client (Wayland/X11 tools).
 
 ## Run
 
-### 1) Start server on laptop
+### 1) Start server
 
 ```bash
 go run . server -addr :8080 -db clipboard.db
 ```
 
-### 2) Start Linux clipboard watcher client
+### 2) Start clipboard watcher on Linux
 
 ```bash
 go run . client -server http://127.0.0.1:8080 -interval 1s
@@ -26,21 +27,20 @@ go run . client -server http://127.0.0.1:8080 -interval 1s
 
 ### 3) Open from phone
 
-Use your laptop LAN IP (example `192.168.1.20`):
-
 ```text
-http://192.168.1.20:8080
+http://<your-laptop-lan-ip>:8080
 ```
 
 ## API
 
-- `POST /api/clipboard` with `{ "text": "...", "source": "mobile-web" }`
-- `GET /api/clipboard` for latest value
-- `GET /api/history?limit=25` for recent history
+- `POST /api/clipboard` → save latest clipboard
+- `GET /api/clipboard` → get latest clipboard
+- `GET /api/history?limit=80&q=keyword` → list/search history (pinned first)
+- `POST /api/history/pin` with `{ "id": 4, "pinned": true }`
 
 ## Linux dependencies
 
 Install one clipboard tool:
 
-- Wayland: `wl-clipboard` (`wl-paste` and `wl-copy`)
+- Wayland: `wl-paste` + `wl-copy` (`wl-clipboard` package)
 - X11: `xclip` or `xsel`
