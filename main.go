@@ -463,14 +463,16 @@ const indexHTML = `<!doctype html>
       theme: {
         extend: {
           colors: {
-            pine: {
-              950: '#050c08',
-              900: '#0a1711',
-              800: '#102219',
-              700: '#173528',
-              500: '#46d88c',
-              400: '#67d4a0',
-              300: '#9fceb5'
+            aurum: {
+              950: '#0c0904',
+              900: '#171108',
+              800: '#22180b',
+              700: '#2d1f0d',
+              600: '#6c4d16',
+              500: '#c89c3d',
+              400: '#dfb65b',
+              300: '#f2d58b',
+              200: '#f8e7b8'
             }
           }
         }
@@ -478,39 +480,39 @@ const indexHTML = `<!doctype html>
     };
   </script>
 </head>
-<body class="bg-gradient-to-b from-[#132b1f] via-pine-950 to-[#030805] text-green-50 min-h-screen text-[13px] leading-tight">
-  <div class="max-w-4xl mx-auto p-2 sm:p-3">
-    <h1 class="text-sm sm:text-base font-semibold tracking-wide">📋 Local Clipboard</h1>
-    <p class="text-[11px] text-pine-300 mt-0.5 mb-2">Tailwind compact mobile UI · searchable history · pin + copy actions.</p>
+<body class="bg-[radial-gradient(circle_at_20%_10%,#3a2a10_0%,#120d06_42%,#050403_100%)] text-amber-50 min-h-screen text-[13px] leading-tight">
+  <div class="max-w-5xl mx-auto p-2 sm:p-4">
+    <h1 class="text-sm sm:text-base font-semibold tracking-wide">✦ Auric Clipboard Suite</h1>
+    <p class="text-[11px] text-amber-200/80 mt-0.5 mb-2">Luxury compact UI · gold accents · searchable, pinnable clipboard timeline.</p>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
-      <section class="rounded-xl border border-[#3c6b52] bg-[#0d1e16] shadow-lg shadow-black/30 p-2">
+      <section class="rounded-2xl border border-amber-400/35 bg-gradient-to-b from-[#2b1e0c]/90 via-[#1b1308]/95 to-[#120d06]/95 shadow-[0_10px_30px_rgba(0,0,0,0.45)] backdrop-blur p-2.5">
         <div class="flex items-center justify-between gap-2 mb-1.5">
           <h2 class="text-xs font-semibold">Send text</h2>
-          <span class="text-[10px] text-pine-300">mobile → laptop</span>
+          <span class="text-[10px] text-amber-200/80">mobile → laptop</span>
         </div>
-        <textarea id="clipInput" class="w-full min-h-[84px] rounded-lg border border-[#5ea884] bg-pine-900 px-2 py-2 text-[12px] text-green-50 focus:outline-none focus:ring-2 focus:ring-pine-500/40" placeholder="Paste text..."></textarea>
+        <textarea id="clipInput" class="w-full min-h-[84px] rounded-lg border border-amber-300/45 bg-[#171108]/95 px-2 py-2 text-[12px] text-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-400/35" placeholder="Paste text..."></textarea>
         <div class="mt-1.5 flex gap-1.5">
-          <button id="sendBtn" class="rounded-lg border border-transparent bg-gradient-to-b from-[#52e498] to-pine-500 text-[#082515] font-semibold px-2.5 py-1.5 text-[11px]">Send</button>
-          <button id="clearBtn" class="rounded-lg border border-[#33654d] bg-pine-700 text-green-100 font-semibold px-2.5 py-1.5 text-[11px]">Clear</button>
+          <button id="sendBtn" class="rounded-lg border border-transparent bg-gradient-to-b from-amber-300 to-amber-500 text-[#241603] shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] font-semibold px-2.5 py-1.5 text-[11px]">Send</button>
+          <button id="clearBtn" class="rounded-lg border border-[#33654d] bg-[#2a1d0b] text-amber-100 font-semibold px-2.5 py-1.5 text-[11px]">Clear</button>
         </div>
-        <p id="sendStatus" class="min-h-4 text-[11px] text-pine-300 mt-1"></p>
+        <p id="sendStatus" class="min-h-4 text-[11px] text-amber-200/80 mt-1"></p>
 
         <div class="flex items-center justify-between gap-2 mt-2 mb-1">
           <h2 class="text-xs font-semibold">Latest</h2>
-          <span class="text-[10px] text-pine-300">current clipboard</span>
+          <span class="text-[10px] text-amber-200/80">current clipboard</span>
         </div>
-        <pre id="latest" class="rounded-lg border border-[#5ea884] bg-pine-900 p-2 text-[12px] whitespace-pre-wrap break-words max-h-40 overflow-auto">Loading...</pre>
+        <pre id="latest" class="rounded-lg border border-amber-300/45 bg-[#171108]/95 p-2 text-[12px] whitespace-pre-wrap break-words max-h-40 overflow-auto">Loading...</pre>
       </section>
 
-      <section class="rounded-xl border border-[#3c6b52] bg-[#0d1e16] shadow-lg shadow-black/30 p-2">
+      <section class="rounded-2xl border border-amber-400/35 bg-gradient-to-b from-[#2b1e0c]/90 via-[#1b1308]/95 to-[#120d06]/95 shadow-[0_10px_30px_rgba(0,0,0,0.45)] backdrop-blur p-2.5">
         <div class="flex items-center justify-between gap-2 mb-1.5">
           <h2 class="text-xs font-semibold">History</h2>
-          <span class="text-[10px] text-pine-300">pins stay on top</span>
+          <span class="text-[10px] text-amber-200/80">pins stay on top</span>
         </div>
         <div class="grid grid-cols-[1fr_auto] gap-1.5 mb-1.5">
-          <input id="searchInput" class="rounded-lg border border-[#5ea884] bg-pine-900 px-2 py-1.5 text-[12px] text-green-50 focus:outline-none focus:ring-2 focus:ring-pine-500/40" placeholder="Search copied text..." />
-          <button id="searchBtn" class="rounded-lg border border-[#33654d] bg-pine-700 text-green-100 font-semibold px-2 py-1.5 text-[11px]">Find</button>
+          <input id="searchInput" class="rounded-lg border border-amber-300/45 bg-[#171108]/95 px-2 py-1.5 text-[12px] text-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-400/35" placeholder="Search copied text..." />
+          <button id="searchBtn" class="rounded-lg border border-[#33654d] bg-[#2a1d0b] text-amber-100 font-semibold px-2 py-1.5 text-[11px]">Find</button>
         </div>
         <div id="history" class="grid gap-1 max-h-[68vh] overflow-auto pr-0.5"></div>
       </section>
@@ -533,14 +535,14 @@ function shortText(text) {
 }
 
 function iconClipboard() {
-  return '<svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="4" rx="1"></rect><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path></svg>';
+  return '<svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="4" rx="1"></rect><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path></svg>';
 }
 
 function iconPin(filled) {
   if (filled) {
-    return '<svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor"><path d="M16 3l5 5-2 2-2-2-3 3v4l-2 2-1-1-4 4-1-1 4-4-1-1 2-2h4l3-3-2-2 2-2z"/></svg>';
+    return '<svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor"><path d="M16 3l5 5-2 2-2-2-3 3v4l-2 2-1-1-4 4-1-1 4-4-1-1 2-2h4l3-3-2-2 2-2z"/></svg>';
   }
-  return '<svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3l7 7-3 3-3-3-3 3v4l-2 2-1-1-4 4-1-1 4-4-1-1 2-2h4l3-3-3-3 3-3z"/></svg>';
+  return '<svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3l7 7-3 3-3-3-3 3v4l-2 2-1-1-4 4-1-1 4-4-1-1 2-2h4l3-3-3-3 3-3z"/></svg>';
 }
 
 async function loadLatest() {
@@ -609,21 +611,21 @@ async function loadHistory() {
   const query = currentQuery ? '&q=' + encodeURIComponent(currentQuery) : '';
   try {
     const res = await fetch('/api/history?limit=80' + query, { cache: 'no-store' });
-    if (!res.ok) { host.innerHTML = '<div class="text-[11px] text-pine-300 text-center p-2 border border-dashed border-[#467c5f] rounded-lg">No history yet.</div>'; return; }
+    if (!res.ok) { host.innerHTML = '<div class="text-[11px] text-amber-200/80 text-center p-2 border border-dashed border-amber-500/35 rounded-lg">No history yet.</div>'; return; }
     currentItems = await res.json();
-    if (!currentItems.length) { host.innerHTML = '<div class="text-[11px] text-pine-300 text-center p-2 border border-dashed border-[#467c5f] rounded-lg">No matching history.</div>'; return; }
+    if (!currentItems.length) { host.innerHTML = '<div class="text-[11px] text-amber-200/80 text-center p-2 border border-dashed border-amber-500/35 rounded-lg">No matching history.</div>'; return; }
 
     host.innerHTML = currentItems.map(function(item){
-      const pinClass = item.pinned ? 'bg-[#226a47] border-[#67d4a0]' : 'bg-[#1a3a2b] border-[#3b7759]';
-      return '<article class="rounded-lg border border-[#5ea884] bg-gradient-to-b from-[#102219] to-pine-900 p-1.5">'
+      const pinClass = item.pinned ? 'bg-amber-500/25 border-amber-300/70' : 'bg-[#2a1d0b] border-amber-700/60';
+      return '<article class="rounded-lg border border-amber-300/45 bg-gradient-to-b from-[#2a1d0b] to-[#161006] p-1.5">'
         + '<div class="flex items-center justify-between gap-2">'
           + '<div class="flex gap-1">'
-            + '<button class="icon-btn copy-btn inline-flex items-center justify-center w-7 h-7 rounded-md border border-[#3b7759] bg-[#1a3a2b] text-green-100" data-id="' + item.id + '" title="Copy">' + iconClipboard() + '</button>'
-            + '<button class="icon-btn pin-btn inline-flex items-center justify-center w-7 h-7 rounded-md border ' + pinClass + ' text-green-100" data-id="' + item.id + '" data-pinned="' + item.pinned + '" title="Pin">' + iconPin(item.pinned) + '</button>'
+            + '<button class="icon-btn copy-btn inline-flex items-center justify-center w-8 h-8 rounded-lg border border-amber-400/50 bg-[#2b1f0c] text-amber-100 shadow-inner" data-id="' + item.id + '" title="Copy">' + iconClipboard() + '</button>'
+            + '<button class="icon-btn pin-btn inline-flex items-center justify-center w-8 h-8 rounded-lg border ' + pinClass + ' text-amber-100" data-id="' + item.id + '" data-pinned="' + item.pinned + '" title="Pin">' + iconPin(item.pinned) + '</button>'
           + '</div>'
         + '</div>'
-        + '<div class="mt-1 text-[12px] leading-tight whitespace-pre-wrap break-words text-green-50">' + escHtml(shortText(item.text)) + '</div>'
-        + '<div class="mt-1 pt-1 border-t border-dashed border-[#315f47] text-[10px] text-pine-300 flex gap-2 flex-wrap"><span>from ' + escHtml(item.source) + '</span><span>' + new Date(item.updated_at).toLocaleString() + '</span></div>'
+        + '<div class="mt-1 text-[12px] leading-tight whitespace-pre-wrap break-words text-amber-50">' + escHtml(shortText(item.text)) + '</div>'
+        + '<div class="mt-1 pt-1 border-t border-dashed border-amber-500/30 text-[10px] text-amber-200/80 flex gap-2 flex-wrap"><span>from ' + escHtml(item.source) + '</span><span>' + new Date(item.updated_at).toLocaleString() + '</span></div>'
       + '</article>';
     }).join('');
 
@@ -648,7 +650,7 @@ async function loadHistory() {
       });
     });
   } catch (err) {
-    host.innerHTML = '<div class="text-[11px] text-pine-300 text-center p-2 border border-dashed border-[#467c5f] rounded-lg">Failed to load history.</div>';
+    host.innerHTML = '<div class="text-[11px] text-amber-200/80 text-center p-2 border border-dashed border-amber-500/35 rounded-lg">Failed to load history.</div>';
   }
 }
 
