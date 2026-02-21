@@ -4,7 +4,7 @@ A compact Go app to sync clipboard text between Linux and phone on your local ne
 
 ## Features
 
-- Responsive green-themed UI tuned for small phones (including iPhone-sized screens).
+- **Vue 3 UI** in `web/`: modern SPA (Plus Jakarta Sans, teal accent, dark theme) with send form, latest clipboard, searchable history, pin, and copy. Build with `cd web && npm run build`; Go serves `web/dist` by default.
 - Mobile send form + live latest clipboard view.
 - Searchable history with pin-to-top behavior.
 - One-tap copy button on each history card.
@@ -13,19 +13,29 @@ A compact Go app to sync clipboard text between Linux and phone on your local ne
 
 ## Run
 
-### 1) Start server
+### 1) Build the Vue UI (recommended)
+
+```bash
+cd web && npm install && npm run build && cd ..
+```
+
+The server serves the built app from `web/dist` by default.
+
+### 2) Start server
 
 ```bash
 go run . server -addr :8080 -db clipboard.db
 ```
 
-### 2) Start clipboard watcher on Linux
+Use `-static ""` to skip the Vue app and use the embedded fallback HTML. Use `-static web/dist` (default) to serve the Vue SPA.
+
+### 3) Start clipboard watcher on Linux
 
 ```bash
 go run . client -server http://127.0.0.1:8080 -interval 1s
 ```
 
-### 3) Open from phone
+### 4) Open from phone
 
 ```text
 http://<your-laptop-lan-ip>:8080
