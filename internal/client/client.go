@@ -22,8 +22,9 @@ type Config struct {
 }
 
 // Run runs the clipboard client: poll local clipboard, push to server, optionally pull remote.
+// On Linux, if no clipboard tool is found, attempts to install wl-clipboard or xclip (may prompt for sudo).
 func Run(cfg Config) {
-	localRead, localWrite, err := clipboard.Detect()
+	localRead, localWrite, err := clipboard.EnsureDetect()
 	if err != nil {
 		log.Fatalf("clipboard command setup failed: %v", err)
 	}

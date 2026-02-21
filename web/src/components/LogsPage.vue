@@ -80,6 +80,7 @@ defineEmits(['refresh', 'select', 'close-detail'])
   width: 100%;
   padding: 0;
   margin: 0;
+  min-height: calc(100dvh - 5rem);
   min-height: calc(100vh - 5rem);
   display: flex;
   flex-direction: column;
@@ -91,33 +92,48 @@ defineEmits(['refresh', 'select', 'close-detail'])
   background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  margin: 0 1.25rem 2rem;
+  margin: 0 0.75rem 1.5rem;
   min-height: 0;
+}
+@media (min-width: 600px) {
+  .logs-panel-full { margin: 0 1rem 1.75rem; }
+}
+@media (min-width: 900px) {
+  .logs-panel-full { margin: 0 1.25rem 2rem; }
 }
 .logs-panel-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
+  gap: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
+}
+@media (min-width: 600px) {
+  .logs-panel-header { padding: 1rem 1.25rem; gap: 0.75rem; }
 }
 .logs-panel-header h2 { margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--headline); }
 .logs-panel-header .hint { color: var(--text-muted); font-size: 0.9rem; }
 .logs-panel-header .btn { margin-left: auto; }
 .logs-table-wrap {
   overflow: auto;
+  overflow-x: hidden;
   flex: 1;
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem;
   min-height: 200px;
+}
+@media (min-width: 600px) {
+  .logs-table-wrap { padding: 0.75rem; }
 }
 .logs-list { display: flex; flex-direction: column; gap: 0.5rem; }
 .log-card {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.85rem 1rem;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 0.85rem;
   text-align: left;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -126,6 +142,10 @@ defineEmits(['refresh', 'select', 'close-detail'])
   transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
   font: inherit;
   color: inherit;
+  min-height: 44px;
+}
+@media (min-width: 600px) {
+  .log-card { padding: 0.85rem 1rem; min-height: 0; }
 }
 .log-card:hover {
   border-color: var(--border-strong);

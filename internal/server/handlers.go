@@ -177,3 +177,17 @@ func (a *App) handleLogs(w http.ResponseWriter, r *http.Request) {
 	}
 	respondJSON(w, http.StatusOK, a.Logs.List())
 }
+
+func (a *App) handleServerInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		respondError(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	urls := a.ServerURLs
+	if urls == nil {
+		urls = []string{}
+	}
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"urls": urls,
+	})
+}

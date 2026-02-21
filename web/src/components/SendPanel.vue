@@ -120,7 +120,10 @@ defineExpose({ sendTextareaRef })
   border-color: var(--accent-dim);
 }
 .panel-glow { position: absolute; inset: 0; pointer-events: none; }
-.panel-inner { position: relative; padding: 1.25rem; }
+.panel-inner { position: relative; padding: 0.9rem; }
+@media (min-width: 600px) {
+  .panel-inner { padding: 1.25rem; }
+}
 @keyframes panelIn {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
@@ -160,15 +163,19 @@ defineExpose({ sendTextareaRef })
 .icon-btn-small:hover { color: var(--accent); border-color: var(--accent-dim); }
 .textarea {
   width: 100%;
-  min-height: 108px;
-  padding: 0.85rem 1rem;
+  min-height: 96px;
+  padding: 0.75rem 1rem;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text);
   font: inherit;
+  font-size: 16px;
   resize: vertical;
   transition: border-color 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+}
+@media (min-width: 600px) {
+  .textarea { min-height: 108px; padding: 0.85rem 1rem; font-size: inherit; }
 }
 .textarea:focus {
   outline: none;
@@ -181,19 +188,26 @@ defineExpose({ sendTextareaRef })
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  margin-top: 0.75rem;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+@media (min-width: 600px) {
+  .toolbar { gap: 0.6rem; margin-top: 0.75rem; }
 }
 .btn {
-  padding: 0.6rem 1.1rem;
+  padding: 0.6rem 1rem;
+  min-height: 44px;
   border: none;
   border-radius: var(--radius-sm);
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
   transition: transform 0.15s var(--ease-out), background 0.2s, box-shadow 0.2s;
   position: relative;
+}
+@media (min-width: 600px) {
+  .btn { padding: 0.6rem 1.1rem; font-size: 0.9rem; min-height: 0; }
 }
 .btn:active { transform: scale(0.98); }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }

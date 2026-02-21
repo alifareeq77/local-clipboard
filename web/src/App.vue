@@ -8,6 +8,7 @@
       :latest="clipboard.latest.value"
       @navigate="onNavigate"
       @refresh="refreshAll"
+      @copy-url="() => toasts.showToast('URL copied', 'success')"
     />
 
     <main class="main" v-show="currentPage === 'main'">
@@ -75,6 +76,13 @@
     />
 
     <ShortcutsModal v-if="showShortcuts" @close="showShortcuts = false" />
+
+    <footer class="credit">
+      Created with ❤️ by
+      <a href="https://github.com/alifareeq77" target="_blank" rel="noopener noreferrer">alifareeq</a>
+      ·
+      <a href="https://www.linkedin.com/in/ali-fareeq-1390351b0/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </footer>
   </div>
 </template>
 
@@ -161,10 +169,51 @@ onUnmounted(() => {
 
 <style>
 * { box-sizing: border-box; }
+
+/* Minimal scrollbar: thin and only when needed; no horizontal scroll */
+html {
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+body {
+  overflow-x: hidden;
+  margin: 0;
+  min-height: 100dvh;
+  min-height: 100vh;
+}
+/* WebKit: thin, subtle scrollbar */
+html::-webkit-scrollbar,
+.app::-webkit-scrollbar,
+[class*="-list"]::-webkit-scrollbar,
+[class*="-wrap"]::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+html::-webkit-scrollbar-track,
+.app::-webkit-scrollbar-track,
+[class*="-list"]::-webkit-scrollbar-track,
+[class*="-wrap"]::-webkit-scrollbar-track {
+  background: transparent;
+}
+html::-webkit-scrollbar-thumb,
+.app::-webkit-scrollbar-thumb,
+[class*="-list"]::-webkit-scrollbar-thumb,
+[class*="-wrap"]::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+}
+html::-webkit-scrollbar-thumb:hover,
+.app::-webkit-scrollbar-thumb:hover,
+[class*="-list"]::-webkit-scrollbar-thumb:hover,
+[class*="-wrap"]::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
 </style>
 
 <style scoped>
 .app {
+  min-height: 100dvh;
   min-height: 100vh;
   position: relative;
   font-family: var(--font);
@@ -172,6 +221,10 @@ onUnmounted(() => {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   color: var(--text);
+  overflow-x: hidden;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .bg {
@@ -186,17 +239,44 @@ onUnmounted(() => {
   position: relative;
   z-index: 1;
   max-width: 1120px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 1.25rem 2rem;
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: 1fr;
+  padding: 0 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .main {
+    padding: 0 1rem 1.75rem;
+    gap: 1.25rem;
+  }
 }
 
 @media (min-width: 900px) {
   .main {
-    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
+    padding: 0 1.25rem 2rem;
   }
+}
+
+.credit {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+@media (min-width: 600px) {
+  .credit { padding: 1rem 1rem; font-size: 0.85rem; }
+}
+.credit a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.credit a:hover {
+  text-decoration: underline;
 }
 </style>

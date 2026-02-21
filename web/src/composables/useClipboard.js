@@ -13,7 +13,8 @@ export function useClipboard(showToast) {
   let latestTimer = null
   let latestUpdatedTimeout = null
 
-  async function loadLatest() {
+  /** @param {boolean} [skipHistoryRefresh] - true when we're about to refresh history ourselves (e.g. after send from this tab) */
+  async function loadLatest(skipHistoryRefresh = false) {
     latestLoading.value = true
     try {
       const data = await getClipboard()
@@ -23,6 +24,10 @@ export function useClipboard(showToast) {
         latestUpdated.value = true
         clearTimeout(latestUpdatedTimeout)
         latestUpdatedTimeout = setTimeout(() => { latestUpdated.value = false }, 2000)
+        // Update history when a new push is detected (from any device). Skip when we just sent from this tab (caller will refresh).
+        if (loadHistoryRef && !skipHistoryRefresh) {
+          await loadHistoryRef()
+        }
       }
     } catch {
       latest.value = null
@@ -45,7 +50,7 @@ export function useClipboard(showToast) {
       sendStatus.value = 'Saved.'
       showToast('Sent to clipboard', 'success')
       inputText.value = ''
-      await loadLatest()
+      await loadLatest(true)
       if (loadHistoryRef) await loadHistoryRef()
     } catch (e) {
       sendStatus.value = 'Failed: ' + (e.message || 'network error')

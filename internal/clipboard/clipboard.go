@@ -35,6 +35,18 @@ func Detect() (read Cmd, write *Cmd, err error) {
 	return Cmd{}, nil, errors.New("no supported clipboard command found (install wl-clipboard, xclip, or xsel)")
 }
 
+// EnsureDetect returns clipboard read/write commands, attempting to install a tool (e.g. wl-clipboard or xclip) on Linux if none is found.
+func EnsureDetect() (read Cmd, write *Cmd, err error) {
+	read, write, err = Detect()
+	if err == nil {
+		return read, write, nil
+	}
+	if TryInstall() {
+		read, write, err = Detect()
+	}
+	return read, write, err
+}
+
 // Read runs the read command and returns the clipboard text.
 func Read(cmd Cmd) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)

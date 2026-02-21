@@ -175,7 +175,10 @@ defineExpose({ searchInputRef, historyListRef })
   border-color: var(--accent-dim);
 }
 .panel-glow { position: absolute; inset: 0; pointer-events: none; }
-.panel-inner { position: relative; padding: 1.25rem; }
+.panel-inner { position: relative; padding: 0.9rem; }
+@media (min-width: 600px) {
+  .panel-inner { padding: 1.25rem; }
+}
 @keyframes panelIn {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
@@ -189,25 +192,40 @@ defineExpose({ searchInputRef, historyListRef })
 }
 .panel-header h2 { margin: 0; font-size: 1rem; font-weight: 600; color: var(--headline); }
 .hint { color: var(--text-muted); font-size: 0.8rem; margin-left: auto; }
-.controls-row { display: grid; grid-template-columns: 1fr auto; gap: 0.5rem; margin-bottom: 0.65rem; }
-.search-wrap { position: relative; display: flex; align-items: center; }
+.controls-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+@media (max-width: 380px) {
+  .controls-row { grid-template-columns: 1fr; }
+}
+.search-wrap { position: relative; display: flex; align-items: center; min-width: 0; }
 .search-icon {
   position: absolute;
-  left: 0.85rem;
+  left: 0.75rem;
   display: flex;
   flex-shrink: 0;
   color: var(--text-muted);
   pointer-events: none;
 }
+@media (min-width: 600px) {
+  .search-icon { left: 0.85rem; }
+}
 .search-input {
   width: 100%;
-  padding: 0.6rem 2rem 0.6rem 2.25rem;
+  padding: 0.6rem 2rem 0.6rem 2rem;
+  font-size: 16px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text);
   font: inherit;
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+@media (min-width: 600px) {
+  .search-input { padding: 0.6rem 2rem 0.6rem 2.25rem; font-size: inherit; }
 }
 .search-input:focus {
   outline: none;
@@ -278,14 +296,18 @@ defineExpose({ searchInputRef, historyListRef })
 .btn-ghost { background: var(--accent-soft); color: var(--accent); }
 .btn-sm { padding: 0.45rem 0.75rem; font-size: 0.85rem; }
 .history-list {
+  max-height: 50dvh;
   max-height: 56vh;
   overflow: auto;
-  padding-right: 6px;
+  overflow-x: hidden;
+  padding-right: 4px;
   scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
 }
-.history-list::-webkit-scrollbar { width: 8px; }
-.history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.history-list::-webkit-scrollbar { width: 6px; }
+.history-list::-webkit-scrollbar-track { background: transparent; }
+.history-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 3px; }
+.history-list::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 .history-items { display: flex; flex-direction: column; gap: 0.5rem; }
 .history-items.compact .history-item { padding: 0.55rem 0.85rem; }
 .history-items.compact .item-text { font-size: 0.85rem; }
@@ -305,7 +327,9 @@ defineExpose({ searchInputRef, historyListRef })
 .item-body { flex: 1; min-width: 0; }
 .item-actions { display: flex; align-items: center; gap: 0.3rem; flex-shrink: 0; }
 .icon-btn {
-  padding: 0.38rem 0.55rem;
+  padding: 0.5rem;
+  min-width: 40px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -315,6 +339,9 @@ defineExpose({ searchInputRef, historyListRef })
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s var(--ease-out);
+}
+@media (min-width: 600px) {
+  .icon-btn { padding: 0.38rem 0.55rem; min-width: 0; min-height: 0; }
 }
 .icon-btn:hover { color: var(--text); border-color: var(--border-strong); }
 .icon-btn.active { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }

@@ -30,7 +30,9 @@ func Run(cfg Config) {
 		st.Set(latest)
 	}
 	requestLogs := NewRequestLogs()
-	app := &App{Store: st, History: h, Logs: requestLogs}
+	port := PortFromAddr(cfg.Addr)
+	serverURLs := ServerURLs(port)
+	app := &App{Store: st, History: h, Logs: requestLogs, ServerURLs: serverURLs}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/clipboard", app.handleClipboard)
@@ -38,9 +40,16 @@ func Run(cfg Config) {
 	mux.HandleFunc("/api/history/pin", app.handlePin)
 	mux.HandleFunc("/api/history/delete", app.handleDelete)
 	mux.HandleFunc("/api/logs", app.handleLogs)
+	mux.HandleFunc("/api/server-info", app.handleServerInfo)
 	mux.Handle("/", &spaHandler{rootDir: cfg.StaticDir, embed: indexHTML})
 
 	handler := loggingMiddleware(requestLogs, mux)
 	log.Printf("clipboard server listening on %s", cfg.Addr)
+	for _, u := range serverURLs {
+		log.Printf("open from phone: %s", u)
+	}
+	if len(serverURLs) == 0 {
+		log.Printf("no LAN IPs found; use 127.0.0.1:%s on this machine only", port)
+	}
 	log.Fatal(http.ListenAndServe(cfg.Addr, handler))
 }

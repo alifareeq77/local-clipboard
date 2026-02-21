@@ -15,7 +15,10 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run . <server|client> [flags]")
+		fmt.Println("Usage: go run . <server|client|run> [flags]")
+		fmt.Println("  server  - run web server only")
+		fmt.Println("  client  - run clipboard client only")
+		fmt.Println("  run     - run server and client in one process (single binary)")
 		os.Exit(1)
 	}
 
@@ -27,7 +30,9 @@ func main() {
 		staticDir := fs.String("static", "web/dist", "directory containing built Vue app (e.g. web/dist); empty = embedded fallback")
 		noBuild := fs.Bool("no-build", false, "skip automatic Vue build before starting")
 		_ = fs.Parse(os.Args[2:])
-
+		if p := os.Getenv("PORT"); p != "" {
+			*addr = ":" + p
+		}
 		if !*noBuild && *staticDir != "" {
 			buildVue(*staticDir)
 		}
@@ -39,8 +44,29 @@ func main() {
 		source := fs.String("source", client.HostName(), "source label for this machine")
 		_ = fs.Parse(os.Args[2:])
 		client.Run(client.Config{ServerURL: *serverURL, Interval: *interval, Source: *source})
+	case "run":
+		fs := flag.NewFlagSet("run", flag.ExitOnError)
+		addr := fs.String("addr", ":8080", "listen address for the web server")
+		dbPath := fs.String("db", "clipboard.db", "path to sqlite database")
+		staticDir := fs.String("static", "web/dist", "directory containing built Vue app; empty = embedded fallback")
+		noBuild := fs.Bool("no-build", false, "skip automatic Vue build before starting")
+		interval := fs.Duration("interval", 1*time.Second, "poll interval for local clipboard")
+		source := fs.String("source", client.HostName(), "source label for this machine")
+		_ = fs.Parse(os.Args[2:])
+		if p := os.Getenv("PORT"); p != "" {
+			*addr = ":" + p
+		}
+		if !*noBuild && *staticDir != "" {
+			buildVue(*staticDir)
+		}
+		port := server.PortFromAddr(*addr)
+		clientURL := "http://127.0.0.1:" + port
+		go server.Run(server.Config{Addr: *addr, DBPath: *dbPath, StaticDir: *staticDir})
+		time.Sleep(400 * time.Millisecond)
+		log.Printf("running server + client (client -> %s)", clientURL)
+		client.Run(client.Config{ServerURL: clientURL, Interval: *interval, Source: *source})
 	default:
-		fmt.Printf("unknown mode %q, expected server or client\n", os.Args[1])
+		fmt.Printf("unknown mode %q, expected server, client, or run\n", os.Args[1])
 		os.Exit(1)
 	}
 }

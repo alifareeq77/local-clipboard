@@ -93,3 +93,10 @@ export async function getLogs() {
   if (!res.ok) throw new Error(res.statusText)
   return res.json()
 }
+
+/** Server LAN URLs (e.g. http://192.168.1.5:8080) for opening from phone. */
+export async function getServerInfo() {
+  const res = await fetch(`${API}/server-info`, { cache: 'no-store' })
+  if (!res.ok) return { urls: [] }
+  return res.json()
+}
