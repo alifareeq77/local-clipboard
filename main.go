@@ -457,156 +457,62 @@ const indexHTML = `<!doctype html>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Clipboard Bridge</title>
-  <style>
-    :root {
-      --bg: #050c08;
-      --bg2: #0a1711;
-      --card: #0d1e16;
-      --line: #3c6b52;
-      --line-strong: #5ea884;
-      --txt: #ecfff3;
-      --muted: #9fceb5;
-      --primary: #46d88c;
-      --primary2: #34ba74;
-      --shadow: rgba(0,0,0,.38);
-    }
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: radial-gradient(circle at top, #132b1f 0%, var(--bg) 48%, #030805 100%);
-      color: var(--txt);
-      font-family: Inter, system-ui, -apple-system, sans-serif;
-      line-height: 1.25;
-    }
-    .wrap { max-width: 920px; margin: 0 auto; padding: .5rem; }
-    h1 { margin: 0; font-size: 1rem; letter-spacing: .2px; }
-    .top-note { margin: .2rem 0 .52rem; color: var(--muted); font-size: .73rem; }
-    .grid { display: grid; gap: .45rem; grid-template-columns: 1fr; }
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01) 30%, transparent), var(--card);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: .55rem;
-      box-shadow: 0 6px 18px var(--shadow);
-    }
-    .title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: .35rem; gap: .4rem; }
-    .title-row h2 { margin: 0; font-size: .86rem; font-weight: 650; }
-    .secondary { color: var(--muted); font-size: .69rem; }
-    textarea, input {
-      width: 100%;
-      border: 1px solid var(--line-strong);
-      border-radius: 8px;
-      background: linear-gradient(180deg, #0b1812, #0a1510);
-      color: var(--txt);
-      padding: .52rem .58rem;
-      font-size: .82rem;
-      outline: none;
-    }
-    textarea:focus, input:focus { border-color: #78e6ad; box-shadow: 0 0 0 2px rgba(70,216,140,.2); }
-    textarea { min-height: 78px; resize: vertical; }
-    .toolbar { display: flex; gap: .35rem; margin-top: .35rem; }
-    button {
-      border: 1px solid transparent;
-      border-radius: 8px;
-      padding: .44rem .58rem;
-      font-size: .74rem;
-      font-weight: 600;
-      color: #082515;
-      background: linear-gradient(180deg, #52e498, var(--primary));
-      cursor: pointer;
-    }
-    button:hover { background: linear-gradient(180deg, #43d789, var(--primary2)); }
-    button.ghost { background: #173528; color: #d7ffe8; border-color: #33654d; }
-    #sendStatus { min-height: .92rem; margin: .3rem 0 0; font-size: .72rem; color: var(--muted); }
-    #latest {
-      margin: .4rem 0 0;
-      padding: .48rem;
-      border-radius: 8px;
-      border: 1px solid var(--line-strong);
-      background: var(--bg2);
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-size: .78rem;
-      max-height: 20vh;
-      overflow: auto;
-    }
-    .search-row { display: grid; grid-template-columns: 1fr auto; gap: .35rem; margin-bottom: .35rem; }
-    .history { display: grid; gap: .32rem; max-height: 67vh; overflow: auto; padding-right: 2px; }
-    .history-item {
-      border: 1px solid var(--line-strong);
-      border-radius: 8px;
-      padding: .44rem;
-      background: linear-gradient(180deg, #102219, #0a1611);
-    }
-    .history-top { display: flex; justify-content: space-between; align-items: center; gap: .35rem; }
-    .history-text { margin: .26rem 0 0; font-size: .78rem; line-height: 1.22; white-space: pre-wrap; word-break: break-word; color: #f0fff6; }
-    .meta {
-      margin-top: .26rem;
-      font-size: .66rem;
-      color: #98cdb1;
-      display: flex;
-      gap: .45rem;
-      flex-wrap: wrap;
-      border-top: 1px dashed #315f47;
-      padding-top: .2rem;
-    }
-    .actions { display: flex; gap: .28rem; }
-    .icon-btn { background: #1a3a2b; color: #ddffec; padding: .3rem .4rem; font-size: .7rem; border-color: #3b7759; }
-    .pin-on { background: #226a47; border-color: #67d4a0; }
-    .empty { color: var(--muted); font-size: .73rem; text-align: center; padding: .66rem; border: 1px dashed #467c5f; border-radius: 8px; }
-
-    @media (min-width: 860px) {
-      .wrap { padding: .7rem; }
-      .grid { grid-template-columns: 1fr 1fr; }
-      h1 { font-size: 1.14rem; }
-      .card { padding: .62rem; }
-    }
-
-    @media (max-width: 390px) {
-      .wrap { padding: .4rem; }
-      .card { padding: .46rem; border-radius: 9px; }
-      h1 { font-size: .95rem; }
-      .top-note { font-size: .68rem; margin-bottom: .44rem; }
-      .title-row h2 { font-size: .8rem; }
-      .secondary { font-size: .64rem; }
-      textarea, input { font-size: .78rem; padding: .46rem .5rem; border-radius: 7px; }
-      textarea { min-height: 70px; }
-      button { padding: .4rem .5rem; font-size: .7rem; border-radius: 7px; }
-      .icon-btn { padding: .28rem .35rem; font-size: .66rem; }
-      .history { max-height: 62vh; }
-      .history-item { padding: .38rem; }
-      .history-text { font-size: .75rem; }
-      .meta { font-size: .63rem; }
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pine: {
+              950: '#050c08',
+              900: '#0a1711',
+              800: '#102219',
+              700: '#173528',
+              500: '#46d88c',
+              400: '#67d4a0',
+              300: '#9fceb5'
+            }
+          }
+        }
+      }
+    };
+  </script>
 </head>
-<body>
-  <div class="wrap">
-    <h1>📋 Local Clipboard</h1>
-    <p class="top-note">Compact green UI · searchable history · pin + copy actions.</p>
+<body class="bg-gradient-to-b from-[#132b1f] via-pine-950 to-[#030805] text-green-50 min-h-screen text-[13px] leading-tight">
+  <div class="max-w-4xl mx-auto p-2 sm:p-3">
+    <h1 class="text-sm sm:text-base font-semibold tracking-wide">📋 Local Clipboard</h1>
+    <p class="text-[11px] text-pine-300 mt-0.5 mb-2">Tailwind compact mobile UI · searchable history · pin + copy actions.</p>
 
-    <div class="grid">
-      <section class="card">
-        <div class="title-row"><h2>Send text</h2><span class="secondary">mobile → laptop</span></div>
-        <textarea id="clipInput" placeholder="Paste text..."></textarea>
-        <div class="toolbar">
-          <button id="sendBtn">Send</button>
-          <button id="clearBtn" class="ghost">Clear</button>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+      <section class="rounded-xl border border-[#3c6b52] bg-[#0d1e16] shadow-lg shadow-black/30 p-2">
+        <div class="flex items-center justify-between gap-2 mb-1.5">
+          <h2 class="text-xs font-semibold">Send text</h2>
+          <span class="text-[10px] text-pine-300">mobile → laptop</span>
         </div>
-        <p id="sendStatus"></p>
+        <textarea id="clipInput" class="w-full min-h-[84px] rounded-lg border border-[#5ea884] bg-pine-900 px-2 py-2 text-[12px] text-green-50 focus:outline-none focus:ring-2 focus:ring-pine-500/40" placeholder="Paste text..."></textarea>
+        <div class="mt-1.5 flex gap-1.5">
+          <button id="sendBtn" class="rounded-lg border border-transparent bg-gradient-to-b from-[#52e498] to-pine-500 text-[#082515] font-semibold px-2.5 py-1.5 text-[11px]">Send</button>
+          <button id="clearBtn" class="rounded-lg border border-[#33654d] bg-pine-700 text-green-100 font-semibold px-2.5 py-1.5 text-[11px]">Clear</button>
+        </div>
+        <p id="sendStatus" class="min-h-4 text-[11px] text-pine-300 mt-1"></p>
 
-        <div class="title-row" style="margin-top:.55rem"><h2>Latest</h2><span class="secondary">current clipboard</span></div>
-        <pre id="latest">Loading...</pre>
+        <div class="flex items-center justify-between gap-2 mt-2 mb-1">
+          <h2 class="text-xs font-semibold">Latest</h2>
+          <span class="text-[10px] text-pine-300">current clipboard</span>
+        </div>
+        <pre id="latest" class="rounded-lg border border-[#5ea884] bg-pine-900 p-2 text-[12px] whitespace-pre-wrap break-words max-h-40 overflow-auto">Loading...</pre>
       </section>
 
-      <section class="card">
-        <div class="title-row"><h2>History</h2><span class="secondary">pins stay on top</span></div>
-        <div class="search-row">
-          <input id="searchInput" placeholder="Search copied text..." />
-          <button id="searchBtn" class="ghost">Find</button>
+      <section class="rounded-xl border border-[#3c6b52] bg-[#0d1e16] shadow-lg shadow-black/30 p-2">
+        <div class="flex items-center justify-between gap-2 mb-1.5">
+          <h2 class="text-xs font-semibold">History</h2>
+          <span class="text-[10px] text-pine-300">pins stay on top</span>
         </div>
-        <div id="history" class="history"></div>
+        <div class="grid grid-cols-[1fr_auto] gap-1.5 mb-1.5">
+          <input id="searchInput" class="rounded-lg border border-[#5ea884] bg-pine-900 px-2 py-1.5 text-[12px] text-green-50 focus:outline-none focus:ring-2 focus:ring-pine-500/40" placeholder="Search copied text..." />
+          <button id="searchBtn" class="rounded-lg border border-[#33654d] bg-pine-700 text-green-100 font-semibold px-2 py-1.5 text-[11px]">Find</button>
+        </div>
+        <div id="history" class="grid gap-1 max-h-[68vh] overflow-auto pr-0.5"></div>
       </section>
     </div>
   </div>
@@ -624,6 +530,17 @@ function shortText(text) {
   if (!text) return '';
   if (text.length <= 240) return text;
   return text.slice(0, 240) + '…';
+}
+
+function iconClipboard() {
+  return '<svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="4" rx="1"></rect><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path></svg>';
+}
+
+function iconPin(filled) {
+  if (filled) {
+    return '<svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor"><path d="M16 3l5 5-2 2-2-2-3 3v4l-2 2-1-1-4 4-1-1 4-4-1-1 2-2h4l3-3-2-2 2-2z"/></svg>';
+  }
+  return '<svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3l7 7-3 3-3-3-3 3v4l-2 2-1-1-4 4-1-1 4-4-1-1 2-2h4l3-3-3-3 3-3z"/></svg>';
 }
 
 async function loadLatest() {
@@ -644,9 +561,7 @@ async function updatePin(id, pinned) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: id, pinned: pinned })
   });
-  if (!res.ok) {
-    throw new Error('Pin update failed');
-  }
+  if (!res.ok) throw new Error('Pin update failed');
 }
 
 function fallbackCopyText(txt) {
@@ -660,11 +575,7 @@ function fallbackCopyText(txt) {
   ta.select();
   ta.setSelectionRange(0, ta.value.length);
   let ok = false;
-  try {
-    ok = document.execCommand('copy');
-  } catch (e) {
-    ok = false;
-  }
+  try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
   document.body.removeChild(ta);
   return ok;
 }
@@ -673,23 +584,23 @@ async function copyText(txt, btn) {
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(txt);
-      btn.textContent = '✅';
-      setTimeout(function(){ btn.textContent = '📋'; }, 900);
+      btn.innerHTML = '✓';
+      setTimeout(function(){ btn.innerHTML = iconClipboard(); }, 900);
       return;
     }
     if (fallbackCopyText(txt)) {
-      btn.textContent = '✅';
-      setTimeout(function(){ btn.textContent = '📋'; }, 900);
+      btn.innerHTML = '✓';
+      setTimeout(function(){ btn.innerHTML = iconClipboard(); }, 900);
       return;
     }
-    btn.textContent = '❌';
+    btn.innerHTML = '!';
   } catch (e) {
     if (fallbackCopyText(txt)) {
-      btn.textContent = '✅';
-      setTimeout(function(){ btn.textContent = '📋'; }, 900);
+      btn.innerHTML = '✓';
+      setTimeout(function(){ btn.innerHTML = iconClipboard(); }, 900);
       return;
     }
-    btn.textContent = '❌';
+    btn.innerHTML = '!';
   }
 }
 
@@ -698,22 +609,21 @@ async function loadHistory() {
   const query = currentQuery ? '&q=' + encodeURIComponent(currentQuery) : '';
   try {
     const res = await fetch('/api/history?limit=80' + query, { cache: 'no-store' });
-    if (!res.ok) { host.innerHTML = '<div class="empty">No history yet.</div>'; return; }
+    if (!res.ok) { host.innerHTML = '<div class="text-[11px] text-pine-300 text-center p-2 border border-dashed border-[#467c5f] rounded-lg">No history yet.</div>'; return; }
     currentItems = await res.json();
-    if (!currentItems.length) { host.innerHTML = '<div class="empty">No matching history.</div>'; return; }
+    if (!currentItems.length) { host.innerHTML = '<div class="text-[11px] text-pine-300 text-center p-2 border border-dashed border-[#467c5f] rounded-lg">No matching history.</div>'; return; }
 
     host.innerHTML = currentItems.map(function(item){
-      const pinClass = item.pinned ? 'pin-on' : '';
-      const pinLabel = item.pinned ? '📌' : '📍';
-      return '<article class="history-item">'
-        + '<div class="history-top">'
-          + '<div class="actions">'
-            + '<button class="icon-btn copy-btn" data-id="' + item.id + '" title="Copy">📋</button>'
-            + '<button class="icon-btn pin-btn ' + pinClass + '" data-id="' + item.id + '" data-pinned="' + item.pinned + '" title="Pin">' + pinLabel + '</button>'
+      const pinClass = item.pinned ? 'bg-[#226a47] border-[#67d4a0]' : 'bg-[#1a3a2b] border-[#3b7759]';
+      return '<article class="rounded-lg border border-[#5ea884] bg-gradient-to-b from-[#102219] to-pine-900 p-1.5">'
+        + '<div class="flex items-center justify-between gap-2">'
+          + '<div class="flex gap-1">'
+            + '<button class="icon-btn copy-btn inline-flex items-center justify-center w-7 h-7 rounded-md border border-[#3b7759] bg-[#1a3a2b] text-green-100" data-id="' + item.id + '" title="Copy">' + iconClipboard() + '</button>'
+            + '<button class="icon-btn pin-btn inline-flex items-center justify-center w-7 h-7 rounded-md border ' + pinClass + ' text-green-100" data-id="' + item.id + '" data-pinned="' + item.pinned + '" title="Pin">' + iconPin(item.pinned) + '</button>'
           + '</div>'
         + '</div>'
-        + '<div class="history-text">' + escHtml(shortText(item.text)) + '</div>'
-        + '<div class="meta"><span>from ' + escHtml(item.source) + '</span><span>' + new Date(item.updated_at).toLocaleString() + '</span></div>'
+        + '<div class="mt-1 text-[12px] leading-tight whitespace-pre-wrap break-words text-green-50">' + escHtml(shortText(item.text)) + '</div>'
+        + '<div class="mt-1 pt-1 border-t border-dashed border-[#315f47] text-[10px] text-pine-300 flex gap-2 flex-wrap"><span>from ' + escHtml(item.source) + '</span><span>' + new Date(item.updated_at).toLocaleString() + '</span></div>'
       + '</article>';
     }).join('');
 
@@ -738,7 +648,7 @@ async function loadHistory() {
       });
     });
   } catch (err) {
-    host.innerHTML = '<div class="empty">Failed to load history.</div>';
+    host.innerHTML = '<div class="text-[11px] text-pine-300 text-center p-2 border border-dashed border-[#467c5f] rounded-lg">Failed to load history.</div>';
   }
 }
 
@@ -760,13 +670,11 @@ document.getElementById('sendBtn').addEventListener('click', async function(){
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: text, source: 'mobile-web' })
     });
-
     if (!res.ok) {
       const msg = await res.text();
       statusEl.textContent = 'Send failed: ' + (msg || res.statusText);
       return;
     }
-
     statusEl.textContent = 'Saved.';
     document.getElementById('clipInput').value = '';
     await loadLatest();
